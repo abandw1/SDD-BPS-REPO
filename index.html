@@ -17,6 +17,20 @@
 
 <body>
 <h1> Binary Puzzle Solver</h1>
+<label for="mySelect">Choose a grid:</label>
+  <select id="mySelect" name="mySelect">
+    <option value="0">Empty</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+	<option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+	<option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+  </select>
+	<button  onClick="gameSet()" >Submit</button>
 
 <div id="container">
 <div id= "row1" class = "brow">
@@ -74,7 +88,8 @@
 </div>
 
 </div>
-<button class ="bttn" onclick="clearElements()" >clear</button>
+<button class ="bttn" onclick="clearElements()">clear</button>
+<button class ="bttn" onclick="submitElements()">submit</button>
 <script src="./script.js"></script>
 </body>
 </html>
