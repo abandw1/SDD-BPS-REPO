@@ -8,9 +8,13 @@ function clearElements(){
 
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 6; j++) {
-			elements = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
-			document.getElementsByClassName("block_" + j)[i].innerHTML = '';
-			
+			var tempElem = document.getElementsByClassName("block_" + j)[i];
+			if(!tempElem.classList.contains("prefab")){
+				elements[i][j] = "";
+				tempElem.innerHTML = "";
+				
+				
+			}
 		}	
 	}
 }
@@ -21,7 +25,12 @@ function submitElements(){
 
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 6; j++) {
-			document.getElementsByClassName("block_" + j)[i].innerHTML = elements[i][j];
+			var currentBlock = document.getElementsByClassName("block_" + j)[i];
+			if(elements[i][j] != ""){
+			currentBlock.classList.add("prefab");
+			}
+			currentBlock.innerHTML = elements[i][j];
+			
 			
 		}	
 	}
@@ -109,6 +118,7 @@ function gameSet(){
 
 
 $(".block").click(function() {
+	if(!this.classList.contains("prefab")){
 	var bttnClass = this.className;
 	var col = bttnClass.charAt(6);
 	var row = 	$(this).parent().attr("id").charAt(3);
@@ -127,5 +137,5 @@ $(".block").click(function() {
 
 	}
 
-});
+}});
 	
