@@ -5,6 +5,9 @@ var elements = [['','','','','',''],['','','','','',''],['','','','','',''],['',
 
 var puzElem = [[]];
 
+var run;
+
+var num = null;
 
 
 function clearElements(){
@@ -81,24 +84,17 @@ function loadGrid(download, prefabOnly){
 }
 
 
-function solveGrid(repeat){
-	var run = true;
-	var num = null
-	loadGrid(true,true);
-	while(run == true){
+function solveStep(){
 	run = false;	
 	var newelem = elements;
-	var preelems = elements;
 	for (var i = 0; i < 6; i++) {
 			for (var j = 0; j < 6; j++) {
-				if(elements[i][j] == "" && document.getElementsByClassName("block_" + j)[i].innerHTML == ""){
+				if(elements[i][j] == ""){
 				num = rowPairs(j,i);
 				if(num == null){
 					num = colPairs(j,i);
 					if(num == null){
 						num = trios(j,i);
-						
-						
 						if(num == null){
 							num = complete(j,i);
 							if(num == null){
@@ -110,7 +106,7 @@ function solveGrid(repeat){
 					
 				}
 				
-				if(num != "" && repeat == true){
+				if(num != ""){
 					run = true;
 				}
 				newelem[i][j] = num;
@@ -120,6 +116,17 @@ function solveGrid(repeat){
 	}
 	elements = newelem;
 
+	}
+	
+	
+
+
+function solveGrid(){
+	run = true;
+	num = null
+	loadGrid(true,true);
+	while(run == true){
+		solveStep();
 	}
 	
 	loadGrid(false,false);
@@ -207,7 +214,7 @@ function complete(col,row){
 	var zeroCount = 0;
 	var oneCount = 0;
 	//Collumns first.
-	for(var m = 0; m < 5; m++){
+	for(var m = 0; m < 6; m++){
 		if(elements[row][m] == "0"){
 			zeroCount++;
 		}
@@ -223,7 +230,7 @@ function complete(col,row){
 		zeroCount = 0;
 		oneCount = 0;
 		//Then rows.
-		for(m = 0; m < 5; m++){
+		for(m = 0; m < 6; m++){
 		if(elements[m][col] == "0"){
 			zeroCount++;
 		}
