@@ -223,7 +223,7 @@ function complete(col,row){
 		if(elements[m][col] == "0"){
 			zeroCount++;
 		}
-		if(elements[row][m] == "1"){
+		if(elements[m][col] == "1"){
 			oneCount++;
 		}
 		}
