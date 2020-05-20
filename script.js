@@ -81,7 +81,7 @@ function loadGrid(download, prefabOnly){
 }
 
 
-function solveGrid(){
+function solveGrid(repeat){
 	var run = true;
 	var num = null
 	loadGrid(true,true);
@@ -109,10 +109,12 @@ function solveGrid(){
 					}
 					
 				}
-				if(num != ""){
+				
+				if(num != "" && repeat == true){
 					run = true;
 				}
 				newelem[i][j] = num;
+				
 				}
 				}
 	}
@@ -218,6 +220,8 @@ function complete(col,row){
 	}else if(oneCount == 3){
 		return "1";
 	}else{
+		zeroCount = 0;
+		oneCount = 0;
 		//Then rows.
 		for(m = 0; m < 5; m++){
 		if(elements[m][col] == "0"){
