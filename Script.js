@@ -193,7 +193,7 @@ function trioRows(col,row){
 	if(elements[row][col-1] == "1" && elements[row][col+1] == "1"){
 			_temp = "0";
 		}else if(elements[row][col-1] == "0" && elements[row][col+1] == "0"){
-		    _temp = "1";
+			_temp = "1";
 		}
 	}
 	return _temp;
@@ -201,8 +201,40 @@ function trioRows(col,row){
 
 	
 function complete(col,row){
-	
-	return null
+	var zeroCount = 0;
+	var oneCount = 0;
+	//Collumns first.
+	for(var m = 0; m < 5; m++){
+		if(elements[row][m] == "0"){
+			zeroCount++;
+		}
+		if(elements[row][m] == "1"){
+			oneCount++;
+		}
+	}
+	if(zeroCount == 3){
+		return "0";
+	}else if(oneCount == 3){
+		return "1";
+	}else{
+		//Then rows.
+		for(m = 0; m < 5; m++){
+		if(elements[m][col] == "0"){
+			zeroCount++;
+		}
+		if(elements[row][m] == "1"){
+			oneCount++;
+		}
+		}
+		if(zeroCount == 3){
+		return "0";
+		}else if(oneCount == 3){
+		return "1";
+		}else{
+			return null
+		}
+		}
+		
 }
 	
 	
