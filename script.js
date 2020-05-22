@@ -3,7 +3,17 @@
 
 var elements = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
 
+var savedGrid = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
+
 var puzElem = [[]];
+
+var curCols = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
+
+
+var curRows = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
+
+
+var gotCols = false;
 
 
 
@@ -32,14 +42,48 @@ function submitGrid(){
 				bolCheck = false;
 			}
 			
-		}}
+	}}
 	document.getElementById("tfText").style.color = "red";
 	
-	if(bolCheck){
-	document.getElementById("tfText").innerHTML = "Incorrect";
-	}else{
+	if(!bolCheck){
 	document.getElementById("tfText").innerHTML = "Please fill in all squares.";
+	}else{
+	saveGrid();
+	gameSet(false);
+	solveGrid(true,false);
+	if(checkSaved() == true){
+		document.getElementById("tfText").style.color = "green";
+		document.getElementById("tfText").innerHTML = "Correct!";
+	}else{
+		document.getElementById("tfText").innerHTML = "Incorrect.";
 	}
+	}
+}
+
+function checkSaved(){
+	var same = true;
+	for (var i = 0; i < 6; i++) {
+			for (var j = 0; j < 6; j++) {
+				if(savedGrid[i][j] != elements[i][j]){
+					same = false;
+				}
+			}
+	}
+	return same;
+	
+}
+
+function saveGrid(){
+	for (var i = 0; i < 6; i++) {
+			for (var j = 0; j < 6; j++) {
+				
+				
+				savedGrid[i][j] = document.getElementsByClassName("block_" + j)[i].innerHTML;
+				
+			}
+	
+
+		}	
 }
 
 function submitElements(){
@@ -93,13 +137,11 @@ function loadGrid(){
 
 
 
-function solveGrid(redo){
-	console.log(elements);
+function solveGrid(redo, load){
 	var run = true;
 	var num = null;
 	var newelem = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
 	while(run == true){
-		console.log(elements)
 		run = false;	
 		newelem = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
 		for (var i = 0; i < 6; i++) {
@@ -114,8 +156,10 @@ function solveGrid(redo){
 						if(num == null){
 							num = complete(j,i);
 							if(num == null){
+								num = identicalCheck(j,i)
+								if(num == null){
 								num = "";
-								
+								}
 							}
 						}
 					}
@@ -142,8 +186,9 @@ function solveGrid(redo){
 	}
 	}
 	
+	if(load == true){
 	loadElements();
-	
+	}
 }
 
 function rowPairs(col,row){
@@ -225,6 +270,82 @@ function trioRows(col,row){
 	return _temp;
 }
 
+function identicalCheck(col,row){
+	var count = 0;
+	var temp = null;
+	var tempRow0 = ['','','','','','']
+	var tempRow1 = ['','','','','','']
+	for(var i = 0; i < 6; i++){
+	tempRow0[i] = elements[row][i];
+	tempRow1[i] = elements[row][i];
+	if(elements[row][i] == ""){
+		count++;
+		
+	}
+		
+	}
+	if(count == 2){
+		tempRow0[col] = "0";
+		tempRow1[col] = "1";
+		for(i = 0; i < 6; i++){
+		if(tempRow0[i] == ""){
+			tempRow1[i] = "0";
+			tempRow0[i] = "1";
+		}
+		
+	}	
+		for(i = 0; i < 6; i++){
+			if(JSON.stringify(tempRow0) == JSON.stringify(elements[i])){
+				temp = "1"
+			}else if(JSON.stringify(tempRow1) == JSON.stringify(elements[i])){
+				temp = "0"
+			}
+		}
+	}
+	if(temp == null){
+	if(gotCols == false){
+		gotCols = true;
+		for(var x = 0; x < 6; x++)
+		{
+			for(var y = 0;y < 6; y++){
+				curCols[x][y] = elements[y][x]
+			}
+		}
+		
+	} 
+	count = 0;
+	var tempCol0 = ['','','','','','']
+	var tempCol1 = ['','','','','','']
+	for( i = 0; i < 6; i++){
+	tempCol0[i] = elements[i][col];
+	tempCol1[i] = elements[i][col];
+	if(elements[i][col] == ""){
+		count++;
+	}
+		
+	}
+	if(count == 2){
+		tempCol0[row] = "0";
+		tempCol1[row] = "1";
+		for(i = 0; i < 6; i++){
+		if(tempCol0[i] == ""){
+			tempCol1[i] = "0";
+			tempCol0[i] = "1";
+		}
+		
+	}	
+		for(i = 0; i < 6; i++){
+			if(JSON.stringify(tempCol0) == JSON.stringify(curCols[i])){
+				temp = "1"
+			}else if(JSON.stringify(tempCol1) == JSON.stringify(curCols[i])){
+				temp = "0"
+			}
+		}
+	}
+	}
+	return temp;
+	
+}
 	
 function complete(col,row){
 	var zeroCount = 0;
@@ -267,7 +388,7 @@ function complete(col,row){
 }
 	
 	
-function gameSet(){
+function gameSet(check){
 	document.getElementById("tfText").innerHTML = "";
 	switch(document.getElementById("mySelect").value){
 	
@@ -317,12 +438,38 @@ function gameSet(){
 					, ["", "1", "", "", "", ""]
 					, ["1", "", "", "1", "1", ""]];
 		break;
+		case '7': 
+elements =			[["", "1", "", "1", "", "1"],
+["", "", "", "", "", ""],
+["0", "0", "", "", "", ""],
+["", "", "", "", "1", ""],
+["0", "", "1", "0", "", ""],
+["", "1", "", "", "", ""]]
+break;
+case '8':			
+elements =	[["0", "", "", "", "", ""],
+ ["", "1", "1", "", "", ""],
+ ["", "", "1", "", "", ""],
+ ["", "", "", "", "0", ""],
+ ["0", "", "", "", "1", ""],
+ ["", "", "", "", "", ""]]
+break;	
+case '9':
+elements = [["", "", "", "1", "", ""],
+ ["", "", "", "", "", "0"],
+ ["", "", "", "", "0", "0"],
+ ["", "", "", "", "1", ""],
+ ["1", "", "", "", "", ""],
+ ["", "0", "", "0", "", "0"]]
+break;		
 		default:
 		elements = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
 		
 		
 }
+	if(check == true){
 	submitElements();
+	}
 
 }
 
