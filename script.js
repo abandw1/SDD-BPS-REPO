@@ -5,9 +5,8 @@ var elements = [['','','','','',''],['','','','','',''],['','','','','',''],['',
 
 var puzElem = [[]];
 
-var run;
+//github comment
 
-var num = null;
 
 
 function clearElements(){
@@ -58,37 +57,55 @@ function submitElements(){
 			
 		}	
 	}
+	
+	loadElements();
+	
 }
 
 
+function loadElements(){
+	for (var i = 0; i < 6; i++) {
+			for (var j = 0; j < 6; j++) {
+				
+				
+				 document.getElementsByClassName("block_" + j)[i].innerHTML = elements[i][j];
+				
+			}
+	
 
+	}	
+	
+}
 
-function loadGrid(download, prefabOnly){
+function loadGrid(){
 
 	for (var i = 0; i < 6; i++) {
 			for (var j = 0; j < 6; j++) {
 				
-				if(download){
-				var tempElement = document.getElementsByClassName("block_" + j)[i];
-				if(prefabOnly == true && !tempElement.classList.contains("prefab")){
-					elements[i][j] = ""
-				}else{
-					elements[i][j] = tempElement.innerHTML;
-				}}else{
-					document.getElementsByClassName("block_" + j)[i].innerHTML = elements[i][j];
-				}
+				
+				elements[i][j] = document.getElementsByClassName("block_" + j)[i].innerHTML;
+				
 			}
 	
 
 }
+
 }
 
 
-function solveStep(){
-	run = false;	
-	var newelem = elements;
-	for (var i = 0; i < 6; i++) {
+
+function solveGrid(redo){
+	console.log(elements);
+	var run = true;
+	var num = null;
+	var newelem = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
+	while(run == true){
+		console.log(elements)
+		run = false;	
+		newelem = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
+		for (var i = 0; i < 6; i++) {
 			for (var j = 0; j < 6; j++) {
+				
 				if(elements[i][j] == ""){
 				num = rowPairs(j,i);
 				if(num == null){
@@ -113,25 +130,23 @@ function solveStep(){
 				
 				}
 				}
+	if(redo == false){
+		run = false;
 	}
-	elements = newelem;
-
 	}
-	
-	
-
-
-function solveGrid(){
-	run = true;
-	num = null
-	loadGrid(true,true);
-	while(run == true){
-		solveStep();
+	for (var q = 0; q < 6; q++) {
+			for (var p = 0; p < 6; p++) {
+				if(elements[q][p] == "" && newelem[q][p] != ""){
+					elements[q][p] = newelem[q][p];
+				}
+	}	
+	}
 	}
 	
-	loadGrid(false,false);
+	loadElements();
 	
 }
+
 function rowPairs(col,row){
 	var _temp = null;
 	if(col < 4){
@@ -159,11 +174,13 @@ function colPairs(col,row){
 		if(elements[row+1][col] == "1" && elements[row+2][col] == "1"){
 			_temp = "0";
 		}else if(elements[row+1][col] == "0" && elements[row+2][col] == "0"){
+			
 			_temp = "1";
 		}
 	}
 	if(row > 1){
 		if(elements[row-1][col] == "1" && elements[row-2][col] == "1"){
+			
 			_temp = "0";
 		}else if(elements[row-1][col] == "0" && elements[row-2][col] == "0"){
 			_temp = "1";
@@ -223,9 +240,9 @@ function complete(col,row){
 		}
 	}
 	if(zeroCount == 3){
-		return "0";
-	}else if(oneCount == 3){
 		return "1";
+	}else if(oneCount == 3){
+		return "0";
 	}else{
 		zeroCount = 0;
 		oneCount = 0;
@@ -239,13 +256,14 @@ function complete(col,row){
 		}
 		}
 		if(zeroCount == 3){
-		return "0";
-		}else if(oneCount == 3){
 		return "1";
+		}else if(oneCount == 3){
+		return "0";
 		}else{
 			return null
 		}
-		}
+		} 
+	
 		
 }
 	
