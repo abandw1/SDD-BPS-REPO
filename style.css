@@ -26,6 +26,10 @@
     border: 3px solid black;
 }
 
+body{
+	background-color: #dfbc87;
+}
+
 .prefab {
 	text-decoration-color: black;
     font-weight: bold;
@@ -52,6 +56,22 @@
 
 #container {
     display: block;
-    width: 800px;
+    width: 	636px;
+    height: 605px;
+	background-color: whitesmoke;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
+
+#rules {
+	display: block;
+    width: 600px;
     height: 600px;
+	background-color: #DBBA4B;
+	border-radius: 25px;
+	outline: 4px dotted black;
+	outline-offset: -15px;
 }
